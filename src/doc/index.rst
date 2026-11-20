@@ -1,189 +1,133 @@
-
 .. raw:: latex
 
-    \pagestyle{plain}
-    \thispagestyle{plain}
-    %% Suppress all TOC entries for the overview chapter (sections, subsections,
-    %% Copyright addcontentsline) — restored just before \sphinxtableofcontents
-    %% so chapters from Introduction onward appear in the TOC normally.
-    \let\osiaorigaddcontentsline\addcontentsline
-    \renewcommand{\addcontentsline}[3]{}
+   \titlespacing*{\section}{0pt}{4pt}{2pt}
+   \small
+   \pagestyle{plain}
+   \thispagestyle{plain}
+   \let\osiaorigaddcontentsline\addcontentsline
+   \renewcommand{\addcontentsline}[3]{}
 
 .. _chapter-overview:
 
 .. only:: html
 
-    .. admonition:: This is a document template
-        :class: tip
+   .. admonition:: Proposer review draft
 
-        Replace the ``<placeholders>`` and the *lorem ipsum* text throughout with
-        your own content. This landing page is the document's front matter:
+      Version 1.0. Prepared for Incubation consideration; not submitted or approved.
 
-        * **Abstract**, **History**, **Authors**, **Keywords** and **Foreword**
-          are standard front-matter sections — keep them and fill them in.
-        * **Chapters 1–4** demonstrate the authoring system (text, figures,
-          tables, diagrams, and API references). Read them, then replace their
-          content with your specification.
+Multi-Level Delegated Authorization
+===================================
 
-        This notice appears on the web version only; it is excluded from the
-        published PDF. See the project ``CONTRIBUTING`` guide for how to build and publish.
+.. raw:: latex
 
-Title of this document
-========================
+   \vspace*{-10pt}
+
+**Incubation work item proposal \| Version 1.0 \| 20 November 2026**
+
+**Status:** Prepared for proposer review. Not submitted, adopted or approved.
 
 .. only:: html
 
-    **<subtitle of this document>**
+   `Download this proposal as a PDF <specification.pdf>`_.
 
 .. raw:: latex
 
-    \begin{center}\textbf{<subtitle of this document>}\end{center}
+   % Front-matter sections share the index page; restore chapter before the TOC.
+   \let\osiafrontmatterchapter\chapter
+   \let\chapter\section
 
-Abstract
---------
+.. Keep front matter in one block so the chapter toctrees below remain at
+   document level, rather than becoming children of the final Note section.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+.. only:: html or latex
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-culpa qui officia deserunt mollit anim id est laborum.
+   Abstract
+   --------
 
-History
--------
+   AI agents may delegate tasks across service providers and trust domains. This contribution proposes
+   an Incubation work item combining monotonic permission attenuation, binding to the authorized
+   agent's identity and key, and selective disclosure of authorization information.
 
-.. list-table::
-    :header-rows: 1
-    :widths: 10 26 18 14 32
+   An authorizing principal establishes a root grant; each authorized agent may derive narrower grants
+   for designated downstream agents. Verifiers check root authority, delegation evidence, proof of key
+   possession and applicable constraints. A two-level user-authorized flow illustrates the model
+   without prescribing a root-issuance mechanism. The proposed outcome is a Technical Report covering
+   use cases, requirements, a reference model and gap analysis.
 
-    * - Version
-      - Document
-      - Approval
-      - Focus Group
-      - Working Group
-    * - <version>
-      - <title>
-      - <date>
-      - TIDA
-      - <acronym>
+   Authors
+   -------
 
-To access this Document as a PDF, open the published documentation site in your web
-browser and click the PDF download link, or navigate directly to
-https://debora-com.github.io/CUTEspecs/specification.pdf.
+   .. list-table::
+      :header-rows: 1
+      :widths: 22 34 44
 
-Authors
--------
+      * - Name
+        - Affiliation
+        - Contact
+      * - Cheng-Kang CHU
+        - Huawei Technologies Co., Ltd
+        - Chu.Cheng.Kang@huawei.com
+      * - Tieyan LI
+        - Huawei Technologies Co., Ltd
+        - Li.tieyan@huawei.com
+      * - Ye TAO
+        - China Unicom
+        - taoy10@chinaunicom.cn
+      * - Ying WANG
+        - China Unicom
+        - wangy2173@chinaunicom.cn
+      * - Liangliang ZHANG
+        - Huawei Technologies Co., Ltd
+        - Liangliang.zhang@huawei.com
 
-.. list-table::
-    :header-rows: 1
-    :widths: 30 40 30
+   Keywords
+   --------
 
-    * - Name
-      - Affiliation
-      - Contact
-    * - <Jane Doe>
-      - <Organization / Company>
-      - <jane.doe@example.com>
-    * - <John Smith>
-      - <Organization / Company>
-      - <john.smith@example.com>
+   AI agents; multi-level delegation; permission attenuation; agent identity; proof of possession;
+   selective disclosure; cross-domain authorization.
 
-Keywords
---------
+   Foreword
+   --------
 
-Lorem, ipsum, dolor, consectetur, adipiscing.
+   This is a proposed contribution to the ITU-T Focus Group on Trust and Identity for Humans and
+   Agentic AI (FG-TIDA), whose parent group is ITU-T Study Group 17 [P3]. It addresses how a
+   principal's authority can be distributed across cooperating agents with verifiable boundaries and
+   limited disclosure.
 
-.. raw:: latex
+   The document is prepared from the FG-TIDA specification template [P2]. Its content is offered for
+   Incubation discussion and does not represent an adopted position of the Focus Group, an ITU-T
+   Recommendation or an approved standard.
 
-    \newpage
-    \osiacenternextsection
+   Note
+   ----
 
-Foreword
---------
-
-Agentic AI systems now act as autonomous entities capable of reasoning, planning, and
-executing tasks across services, infrastructures, and organizational boundaries. This
-fundamentally changes the nature of identity in digital systems: identity is no longer
-limited to human users and static machine instances but must also encompass autonomous,
-dynamic, and goal-oriented agents. And identity alone is insufficient — the core question
-extends beyond "what an entity is" to "whether, and under what conditions, that entity
-should be trusted to act".
-
-The Focus Group on Trust and Identity for humans and agentic AI (FG-TIDA) addresses trust
-management and interoperable digital identity infrastructure for humans and for agentic AI,
-supporting the development of secure, trustworthy digital ecosystems in which humans and
-agentic AI can safely interact and collaborate.
-
-FG-TIDA was established under Recommendation ITU-T A.7 (Focus groups: Establishment and
-working procedures), with ITU-T Study Group 17 as its parent group. Further details are
-available in the group's terms of reference.
-
-For more news and updates about the TIDA Community, including its supporter organizations,
-please refer to the community's published resources.
+   No official contribution identifier, working-group assignment or approval date has been assigned.
+   The example flow and requirements are a starting point for study, not a complete implementation
+   specification.
 
 .. raw:: latex
 
-    \osiacenternextsection
-
-Note
-----
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit
-voluptatem accusantium doloremque laudantium.
-
-.. Intellectual Property Rights — section commented out. To restore it, remove the
-   leading ".." and the indentation below, and re-add a ".. raw:: latex" block with
-   "\osiacenternextsection" before the heading (to centre it on the PDF).
-
-   Intellectual Property Rights
-   ----------------------------
-
-   ITU draws attention to the possibility that the practice or implementation of this
-   Recommendation may involve the use of a claimed Intellectual Property Right. ITU takes no
-   position concerning the evidence, validity or applicability of claimed Intellectual Property
-   Rights, whether asserted by ITU members or others outside of the Recommendation development
-   process.
-
-   As of the date of approval of this Recommendation, ITU had not received notice of intellectual
-   property, protected by patents/software copyrights, which may be required to implement this
-   Recommendation. However, implementers are cautioned that this may not represent the latest
-   information and are therefore strongly urged to consult the appropriate ITU-T databases
-   available via the ITU-T website at http://www.itu.int/ITU-T/ipr/.
-   Implementers should also be aware that the organization that originated the technically
-   equivalent document listed in the Bibliography may have received notices of intellectual
-   property required for the implementation of this Recommendation.
-
-.. raw:: latex
-
-    %% Copyright notice commented out. To restore, uncomment the lines below.
-    %% \vspace{4em}
-    %% \begin{center}\textcopyright{} ITU 2024\end{center}
-    %%
-    %% \medskip
-    %% All rights reserved. No part of this publication may be reproduced, by any means whatsoever, without the
-    %% prior written permission of ITU.
-
-    %% Restore \addcontentsline so the TOC below (and Chapter 1 onward) populate.
-    \let\addcontentsline\osiaorigaddcontentsline
-    \sphinxtableofcontents
-    \osiamainmatter
+   \let\chapter\osiafrontmatterchapter
+   \let\addcontentsline\osiaorigaddcontentsline
+   \titlespacing*{\section}{0pt}{12pt}{6pt}
+   \normalsize
+   \clearpage
+   \sphinxtableofcontents
+   \osiamainmatter
 
 .. toctree::
-    :maxdepth: 3
-    :numbered:
-    :hidden:
+   :maxdepth: 3
+   :numbered:
+   :hidden:
 
-    chapters/01_chapter1
-    chapters/02_chapter2
-    chapters/03_chapter3
-    chapters/04_chapter4/index
-    chapters/05_annex/index
-    chapters/06_appendix/index
-    chapters/07_references
+   chapters/01_introduction
+   chapters/02_requirements
+   chapters/03_gap_analysis
+   chapters/04_deliverable
+   chapters/05_references
+
+.. toctree::
+   :maxdepth: 3
+   :hidden:
+
+   chapters/annex_a
