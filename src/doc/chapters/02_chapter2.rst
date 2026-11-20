@@ -1,131 +1,78 @@
+.. raw:: latex
 
-.. _chapter2:
+   \clearpage
 
-Figures, tables and diagrams
-============================
+Proposed requirements
+=====================
 
-This chapter demonstrates the visual elements you will use most in a
-specification: images, tables in two different styles, and diagrams generated
-from text. As before, read the rendered page, then open ``chapter2.rst`` to see
-the markup.
+.. raw:: latex
 
-Figures
--------
+   \enlargethispage{1\baselineskip}
+   \titlespacing*{\section}{0pt}{9pt}{4pt}
 
-A *figure* is an image with a caption. Put your image file in the top-level
-``images/`` folder and reference it with a relative path. The ``:width:`` option
-scales it to a share of the page width.
+These are proposed requirements for discussion in Incubation. The word **shall** expresses a
+requirement of the proposed design, not an already approved FG-TIDA requirement.
 
-.. figure:: ../images/components.png
-    :width: 90%
+R1 - Monotonic permission attenuation
+-------------------------------------
 
-    A figure caption appears below the image and is numbered automatically.
+Every child grant shall authorize no more than its parent permits for that delegation. For an
+operation x and resource/task context c, the intended invariant is:
 
-Use a single raster image (PNG) so the same file works in both the web pages and
-the PDF. Vector formats (SVG) look sharper on screen but need a separate PDF
-copy, so PNG keeps the template simple.
+   EnvelopeAllows(G_child, x, c) implies EnvelopeAllows(G_parent, x, c).
 
-Tables
-------
+Here the permission envelope excludes the change of authorized holder from A to B. That identity
+transition is verified separately under R2; it does not grant B the right to use A's parent
+credential.
 
-Two table styles are available; pick whichever is easier for the content.
+This implication covers actions, resources, service audiences, data categories, purposes, locations
+where relevant, amounts, counts, time windows and delegation conditions. Validity intervals shall
+remain within the parent's interval. Delegation shall be allowed explicitly and the remaining
+permitted depth shall decrease at each delegation step.
 
-A **list-table** is the easiest to edit: every cell is a bullet, so you never
-have to align columns by hand. Add or remove rows freely.
+The specification shall define deterministic interpretation of constraints, including resource
+identifiers, currency and units, time boundaries and unsupported expressions. A verifier shall
+reject unknown critical constraints, inconsistent meanings or a subset relationship that it cannot
+establish. A child's narrower positive permissions shall not erase an inherited prohibition.
 
-.. list-table:: A simple list-table
-    :header-rows: 1
-    :widths: 30 70
+R2 - Binding authorization to agent identity
+--------------------------------------------
 
-    * - Field
-      - Description
-    * - id
-      - The unique identifier.
-    * - name
-      - A human-readable name.
+Each grant shall bind its authorized agent to an authenticated identity and a specific public key or
+equivalent verifiable key reference. Each child issuer shall be the authorized holder of the parent
+grant and shall possess the parent's delegation authority.
 
-A **grid-style table** can group rows under spanning headers, which is useful
-for mapping matrices. Its one rule: the cell text MUST line up under the ``=``
-and ``-`` border characters, or the build fails with "Malformed table". Edit it
-carefully, keeping each column within its width.
+The executing agent shall demonstrate possession of the corresponding private key. The proof shall
+be bound to the presented authorization, verifier, fresh challenge or equivalent replay-resistant
+context, and the operation with its security-relevant parameters. Any mapping to a concrete
+transport shall specify exactly what is signed. DPoP is relevant prior work, but does not by itself
+sign arbitrary application request bodies [T2].
 
-.. table:: A grouped table
-    :class: longtable
+Copying G1 to another agent shall not enable its use with that agent's key. Parent and child agents
+shall use separate keys. Key rotation, compromise, revocation and re-binding rules shall not allow
+silent transfer of authority. This property depends on protecting private keys; it does not prevent
+a compromised authorized agent from misusing its own key.
 
-    =================================  ============  ============  ============
-    **Rows**                           Column A      Column B      Column C
-    =================================  ============  ============  ============
-    **Group One**
-    ---------------------------------------------------------------------------
-    Item One                           X             X
-    Item Two                           X             X             X
-    ---------------------------------  ------------  ------------  ------------
-    **Group Two**
-    ---------------------------------------------------------------------------
-    Item Three                         X                           X
-    =================================  ============  ============  ============
+R3 - Selective disclosure of authorization information
+------------------------------------------------------
 
-Diagrams
---------
+Delegation and presentation shall support withholding unrelated task branches, sibling permissions
+and other information unnecessary for the recipient's operation. The verifier shall still obtain
+authenticated evidence for all constraints that affect its authorization decision.
 
-Diagrams are written as *text* and rendered to images at build time using
-PlantUML — so they stay editable, version-controlled, and consistent in style.
-This is a sequence diagram describing an interaction between three parties:
+Two privacy objectives are distinguished:
 
-.. uml::
-    :caption: A sequence diagram, written as text
-    :scale: 50%
+1. **Required baseline:** disclose the selected task branch and all applicable global and branch
+   constraints; hide unrelated branches. This supports cross-domain delegated workflows.
+2. **Enhanced research objective:** hide selected applicable parent values, such as the parent's
+   exact spending ceiling, while proving the child's compliance. Such a profile requires a suitable
+   predicate, range or other verifiable proof mechanism.
 
-    hide footbox
-    actor "Actor" as actor
-    participant "Service A" as A
-    participant "Service B" as B
+Selective disclosure shall not make omitted constraints disappear. A profile shall define mandatory
+disclosure or proof rules. A valid signature on a partially disclosed credential does not, by
+itself, prove attenuation. Privacy claims shall specify the observer, disclosed information,
+remaining correlation and any reliance on an online verifier.
 
-    actor -> A: request()
-    activate A
-    A -> B: lookup(data)
-    B -->> A: result
-    A -->> actor: response
-    deactivate A
+.. raw:: latex
 
-The same ``.. uml::`` block draws many other diagram types. A *class diagram*,
-for example, is a convenient way to document a data model — the entities, their
-fields, and the relationships between them:
-
-.. uml::
-    :caption: A class diagram describing a data model
-    :scale: 50%
-
-    class EntityA {
-        string identifier;
-    }
-
-    class EntityB {
-        string field1;
-        date field2;
-        ...
-    }
-    EntityA o- EntityB
-
-    class EntityC {
-        string field1;
-        int field2;
-        date field3;
-        ...
-    }
-    EntityC -o EntityA
-
-    class EntityD {
-        byte[] data;
-        URL reference;
-    }
-    EntityA o-- "*" EntityD
-
-PlantUML can also draw use-case diagrams, activity diagrams, state machines and
-more — see https://plantuml.com for the full syntax.
-
-.. note::
-
-    Diagrams require PlantUML to be available at build time. The online build
-    (GitHub Pages) installs it automatically; for local builds see the project
-    CONTRIBUTING guide.
+   \titlespacing*{\section}{0pt}{12pt}{6pt}
