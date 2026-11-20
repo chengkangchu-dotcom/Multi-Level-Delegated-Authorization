@@ -1,76 +1,197 @@
+.. raw:: latex
 
-.. _chapter3:
+   \clearpage
 
-============================
-Organising a large document
-============================
+Gap analysis
+============
 
-As a specification grows, you will want to split it across several source files.
-Sphinx offers two mechanisms, and they produce **different results in the
-navigation sidebar** — so it matters which you choose.
+The comparison uses the three proposed requirements defined in Chapter 2: permission attenuation
+(R1), agent identity and key binding (R2), and selective disclosure (R3). An illustrative two-level
+delegation flow is provided in Annex A.
 
-toctree
--------
+This preliminary analysis follows the two complementary formats in ITU-T A Suppl. 6, clause 7 and
+Appendix I [P4]: an inventory of related work followed by identified gaps, proposed studies and
+related activities. The comparison is limited to the cited editions and public proposals reviewed on
+14 November 2026. The gaps concern interoperable composition of R1-R3 across trust domains; they do
+not imply that the underlying mechanisms are unavailable or unstudied.
 
-A ``toctree`` links to other files as *separate pages*, each with its own entry
-in the navigation sidebar. This is how the chapters of this document are joined
-together (see ``index.rst``).
+Existing standards and reusable mechanisms
+------------------------------------------
 
-You write it like this, listing each sub-page (without the ``.rst`` extension):
++--------------------------------+--------------------------------+--------------------------------+
+| Organization and reference     | Relevant coverage              | Remaining issue for this       |
+|                                |                                | proposal                       |
++================================+================================+================================+
+| IETF: OAuth 2.0 Token          | Token exchange supports        | Section 4.1 treats earlier     |
+| Exchange, RFC 8693 [T1];       | delegation and actor           | actors as history, not         |
+| Standards Track RFC            | identification. Nested actor   | access-control inputs. The RFC |
+|                                | claims record previous actors. | does not define a              |
+|                                |                                | verifier-checkable             |
+|                                |                                | permission-subset proof at     |
+|                                |                                | every delegation step or       |
+|                                |                                | selective disclosure of parent |
+|                                |                                | authority.                     |
++--------------------------------+--------------------------------+--------------------------------+
+| IETF: OAuth Rich Authorization | Structured, fine-grained       | Section 6.1 leaves comparison  |
+| Requests, RFC 9396 [T9];       | authorization details for      | rules to each authorization    |
+| Standards Track RFC            | specific APIs and              | type. Providers need agreed    |
+|                                | transactions.                  | semantics for deciding whether |
+|                                |                                | a child grant is contained in  |
+|                                |                                | its parent; JSON structure     |
+|                                |                                | alone does not provide those   |
+|                                |                                | rules.                         |
++--------------------------------+--------------------------------+--------------------------------+
+| IETF: OAuth DPoP, RFC 9449     | Sender-constrained tokens and  | A DPoP key is not, by itself,  |
+| [T2]; Standards Track RFC      | proof of key possession bind   | a trusted agent identity or    |
+|                                | token use to an HTTP method    | authority to delegate. Section |
+|                                | and URI.                       | 11.7 excludes general          |
+|                                |                                | request-body integrity; the    |
+|                                |                                | proposed profile also needs    |
+|                                |                                | binding to relevant operation  |
+|                                |                                | parameters and a delegation    |
+|                                |                                | profile.                       |
++--------------------------------+--------------------------------+--------------------------------+
+| IETF: SD-JWT, RFC 9901 [T3];   | Selective disclosure of signed | Selective disclosure does not  |
+| Standards Track RFC            | claims, with an optional       | establish a child's authority  |
+|                                | holder-key-binding mechanism.  | under its parent or prove      |
+|                                |                                | inequalities over hidden       |
+|                                |                                | limits. An authorization       |
+|                                |                                | profile must require key       |
+|                                |                                | binding and identify claims or |
+|                                |                                | proofs essential to each       |
+|                                |                                | decision, consistent with      |
+|                                |                                | Section 9.7.                   |
++--------------------------------+--------------------------------+--------------------------------+
+| W3C: Verifiable Credentials    | Common issuer, holder,         | Section 5.9 explicitly         |
+| Data Model v2.0 [T5];          | verifier and credential data   | requires an accompanying       |
+| Recommendation                 | model, usable with suitable    | authorization framework. The   |
+|                                | securing mechanisms.           | data model alone does not      |
+|                                |                                | define permission attenuation, |
+|                                |                                | authorized re-delegation or an |
+|                                |                                | agent-specific use proof.      |
++--------------------------------+--------------------------------+--------------------------------+
 
-.. code-block:: rst
+These standards provide complementary building blocks. The issue is their composition: exchanging a
+token, proving a key and disclosing selected claims are separate operations. This proposal seeks
+common rules connecting an accepted root grant to each child agent and to the verifier's decision
+under R1-R3. It does not propose replacing OAuth or the VC data model.
 
-    .. toctree::
+Related drafts and FG-TIDA proposals
+------------------------------------
 
-        _part1
-        _part2
++--------------------------------+--------------------------------+--------------------------------+
+| Organization and reviewed work | Relevant coverage              | Remaining issue for this       |
+|                                |                                | proposal                       |
++================================+================================+================================+
+| IETF submission: Attenuating   | Local attenuation, a defined   | Section 10 acknowledges that   |
+| Authorization Tokens, draft    | tool-constraint vocabulary,    | chains can reveal task, tool,  |
+| -02 [T4]                       | holder-key binding and         | constraint and key-correlation |
+|                                | invocation proof of            | information. Its               |
+|                                | possession.                    | chain-validation mechanism     |
+|                                |                                | does not provide task-branch   |
+|                                |                                | selective disclosure with      |
+|                                |                                | proof of inherited             |
+|                                |                                | constraints.                   |
++--------------------------------+--------------------------------+--------------------------------+
+| IETF submission: Verifiable    | Parent commitments,            | Verification uses the signed   |
+| Attenuated Delegation for AI   | deterministic attenuation      | tokens in the chain. The       |
+| Agent Chains, draft -03 [T7]   | checks, bounded depth and      | reviewed profile does not      |
+|                                | expiry, principal continuity   | specify a selectively          |
+|                                | and DPoP-based key possession. | disclosed parent-evidence      |
+|                                |                                | representation that hides      |
+|                                |                                | unrelated permissions while    |
+|                                |                                | preserving those checks.       |
++--------------------------------+--------------------------------+--------------------------------+
+| IETF submission: OAuth 2.0     | An authorization server issues | Section 11 identifies          |
+| Delegated Authorization, draft | a key-bound root; clients      | information exposure when      |
+| -04 [T8]                       | locally sign constrained child | resource servers receive the   |
+|                                | tokens. The draft defines      | full chain. The reviewed       |
+|                                | chain checks and type-specific | profile does not specify       |
+|                                | permission containment.        | selectively disclosed parent   |
+|                                |                                | evidence that preserves its    |
+|                                |                                | chain and containment checks.  |
++--------------------------------+--------------------------------+--------------------------------+
+| W3C: Data Integrity BBS        | Selective disclosure and       | Deriving a presentation does   |
+| Cryptosuites v1.0 [T6];        | unlinkable derived proof       | not itself authorize a new     |
+| Candidate Recommendation Draft | artifacts, including optional  | agent or prove parent-child    |
+|                                | holder-binding features.       | policy containment. An         |
+|                                |                                | authorization profile and, for |
+|                                |                                | hidden numeric comparisons, an |
+|                                |                                | additional compatible proof    |
+|                                |                                | mechanism are needed.          |
++--------------------------------+--------------------------------+--------------------------------+
+| FG-TIDA public themes: ATHENA, | Overlapping proposals address  | These theme descriptions do    |
+| issue #34 [F1];                | constrained delegation, agent  | not specify the combined       |
+| Subject-Anchored Identity,     | binding and cross-domain       | credential and disclosure      |
+| Delegation and Discovery,      | verification; ATHENA also      | profile studied here. The      |
+| issue #45 [F2]                 | addresses privacy.             | proposed work should           |
+|                                |                                | contribute cross-domain        |
+|                                |                                | delegation use cases and the   |
+|                                |                                | R1-R3 analysis to these        |
+|                                |                                | activities and identify        |
+|                                |                                | opportunities to consolidate   |
+|                                |                                | work.                          |
++--------------------------------+--------------------------------+--------------------------------+
 
-Each listed file becomes its own page. In the sidebar, the parent gets an
-**expand arrow** and the sub-pages appear nested beneath it. The reader clicks
-through to a separate page for each part.
+The three Internet-Drafts are individual submissions and work in progress, not adopted IETF
+standards. The W3C BBS document is a draft rather than a Recommendation; the FG-TIDA issues are
+discussion proposals rather than approved ITU-T specifications. In particular, [T4], [T7] and [T8]
+already specify attenuation and key binding. Their overlap narrows the justification for this work
+to interoperable composition and privacy, rather than the invention of delegation itself.
 
-include
--------
+Identified gaps and proposed studies
+------------------------------------
 
-An ``include`` pastes another file's content directly into the current page, as
-if you had typed it there. The result is a **single continuous page** with no
-extra sidebar entries and no expand arrow.
+GAP-01 - Common attenuation semantics across service domains
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You write it like this, giving the path to each fragment:
+**Gap description.** R1 needs different providers to interpret the same action, resource, audience,
+limit and delegation condition consistently. The reviewed drafts provide concrete containment rules
+within their respective vocabularies; a shared mapping across heterogeneous service domains is not
+established by those separate specifications. Hidden parent information must not make containment
+undecidable or let an applicable restriction be omitted.
 
-.. code-block:: rst
+**Future work.** Compare and reuse existing vocabularies and containment rules, identify only the
+missing mappings, and define how an implementation handles unsupported or undisclosed constraints.
+Use a bounded set of cross-domain task types, with Annex A as one illustrative flow.
 
-    .. include:: _part1.rst
+**Related work.** RFC 8693 [T1]; Rich Authorization Requests [T9]; the delegation drafts [T4], [T7],
+[T8]; FG-TIDA themes [F1], [F2].
 
-    .. include:: _part2.rst
+GAP-02 - Verifiable root authority linked to delegated agents
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use it to break one long chapter into smaller source files — for example, so
-several authors can edit different parts without touching the same file — while
-the reader still sees one seamless chapter.
+**Gap description.** R2 requires each delegation to link authorized agents and their keys. Verifiers
+also need a trusted basis for accepting root authority. Existing identity, key-possession and
+delegation mechanisms cover substantial parts of this chain; their composition needs explicit rules
+for root-authority trust, cross-domain identity mappings and operation binding, including when
+parent evidence is selectively disclosed. A valid signature alone cannot establish the principal's
+rights at a service.
 
-Two rules keep includes working:
+**Future work.** Specify the roles and trust evidence needed to accept a root grant, bind each grant
+to its designated agent, and bind execution to the intended operation. Reuse existing identity and
+PoP mechanisms; treat the user-signed root in Annex A as one issuance model.
 
-- **Name included fragments with a leading underscore** (for example
-  ``_part1.rst``) so the build skips them as standalone pages.
-- **Demote the headings inside a fragment by one level.** The chapter title uses
-  ``=`` underlines; a heading inside an included fragment must use ``-`` so it
-  becomes a *section* of the chapter rather than a new chapter of its own.
+**Related work.** DPoP [T2]; VC Data Model [T5]; delegation drafts [T4], [T7], [T8]; FG-TIDA themes
+[F1], [F2].
 
-Which to use
-------------
+GAP-03 - Selective disclosure with verifiable attenuation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. important::
+**Gap description.** R3 requires an agent to receive only relevant authorization information while
+the verifier still checks R1 and R2. The reviewed delegation drafts expose parent token contents
+needed for chain checks; SD-JWT and BBS provide disclosure mechanisms without defining delegated
+authority. Simply combining their formats does not establish that hidden constraints were respected
+or that a new recipient was authorized.
 
-    Because the two approaches look different in the sidebar, mixing them makes
-    the navigation inconsistent. **Pick one and use it throughout your
-    document.** This template recommends the ``include`` approach: it keeps each
-    chapter on a single page with a clean, uniform sidebar, and lets you still
-    split the source into manageable files. Chapters 4, 5 and 6 of this template
-    are all built with ``include``.
+**Future work.** Study a delegation and presentation profile that hides unrelated task branches,
+preserves authenticated evidence of all applicable constraints, and binds that evidence to the child
+agent. Separately assess proofs over hidden parent values as an enhanced research objective. Compare
+disclosure and correlation properties before selecting a construction.
 
-.. tip::
+**Related work.** SD-JWT [T3]; BBS Cryptosuites [T6]; delegation drafts [T4], [T7], [T8]; ATHENA
+[F1].
 
-    A change to an *included* file does not always trigger a rebuild of the page
-    that includes it. If an edit does not appear, rebuild fully — the project
-    ``CONTRIBUTING`` guide explains how, and the live-preview helper is already configured to
-    do this for you.
+These findings will inform the Technical Report described in Chapter 4, identifying reusable
+mechanisms, missing capabilities and opportunities to coordinate with related FG-TIDA work. The
+analysis does not select a credential format or claim that every gap requires a new standard.
