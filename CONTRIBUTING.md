@@ -1,26 +1,65 @@
-# Modifying the template
+# Contributing
 
-This guide is only about modifying the TIDA specification template itself: how to set it up, edit it, build it, preview it and publish it. Opening an issue or a pull request against this repository is the way to propose an improvement to the template.
+This repository holds an FG-TIDA Working Group specification. Anything you do
+here — an edit, a commit, a pull request, an issue, or a comment — is a
+contribution offered as input to the Working Group's work and may be
+incorporated into its deliverables.
 
-It is not the place to propose or to contribute to a work item. To propose a new work item, follow the contribution guide: https://fg-tida.github.io/.github/#new. To contribute to a work item that a Working Group has adopted, see https://fg-tida.github.io/.github/#existing.
+You do not need to be a Git or reStructuredText expert to contribute. If in
+doubt, open an issue and ask — the document editors are usually happy to help a
+contribution into shape.
 
-## Front matter of a work item
+## Ways to contribute
 
-When a work item is created from this template, these are the places to fill in. Replace the placeholders and the lorem ipsum text with your own content.
+- **Pull request** — propose a concrete change to the text.
+- **Issue** — raise a problem, question, or suggestion for discussion.
+- **Mailing list** — discuss direction and larger questions with the Working Group.
 
-In `src/doc/index.rst` (the landing page):
+### Propose a change with a pull request
 
-| Placeholder | Put your |
-| --- | --- |
-| `<acronym>` | short document identifier |
-| `<title>` | full document title |
-| `<subtitle of this document>` | subtitle or one-line summary |
-| `<version>`, `<date>` | version and date in the History table |
-| author name, affiliation, e-mail | authors in the Authors table |
+**In your browser (easiest).** Open the file you want to change under `src/doc/`
+on GitHub, click the pencil (✏️) icon, make your edit, write a short title,
+choose **Propose changes**, then **Create pull request**.
 
-Also fill in the Abstract, Keywords and Foreword sections, and edit the History and Authors tables.
+**With Git locally.**
 
-In `src/doc/conf.py` (near the top), set `project`, `release`, `author`, `copyright` and the `cover_*` values. They appear on the PDF cover and in the page title.
+```shell
+git checkout -b my-change
+# edit files under src/doc/
+git commit -am "Describe your change"
+git push origin my-change
+```
+
+Then open a pull request against `main`.
+
+### Open an issue
+
+Use issues to report errors, raise open questions, or suggest changes you are not
+ready to draft yourself. A clear title and a short description of the problem and
+where it occurs is enough to start a discussion.
+
+## Review and adoption
+
+- Changes are made through pull requests against `main`; **do not push to `main`
+  directly**, so every change keeps a review and decision history.
+- Pull requests are reviewed by the Working Group before they are merged.
+- A contribution or existing draft identified as an *input* is not automatically
+  adopted Working Group text until the appropriate FG-TIDA process has taken place.
+
+## Conduct
+
+Participation in this repository follows the ITU-T and FG-TIDA participation,
+conduct, and IPR rules. Please be respectful and constructive in issues, pull
+requests, and reviews.
+
+---
+
+The rest of this guide explains how to build, preview, and publish the document.
+
+# How to use this template
+
+This guide explains how to start a document from this template, build it
+locally, edit its content, and publish it.
 
 ## 1. Start your document
 

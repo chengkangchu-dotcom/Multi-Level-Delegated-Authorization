@@ -1,39 +1,22 @@
-# TIDA Specification Template
+# Multi-Level Delegated Authorization
 
-<!-- Keep the two sections below in every repository created from this template. Once a work item is created, replace everything below the horizontal line with the metadata of the work item. -->
+Proposed FG-TIDA Incubation work item, version 1.0, 20 November 2026.
+Prepared for proposer review; not submitted, adopted or approved.
 
-## Propose a new work item
+The proposal studies verifiable root authority, attenuated delegation across service providers and trust domains, identity/key binding and selective disclosure.
 
-Want to propose a new work item (NWI) to FG-TIDA? Follow the procedure in the contribution guide: https://fg-tida.github.io/.github/#new
+The source follows FG-TIDA/spec-template commit `7e237a018596e1779d31033464d701ed699c03d5`.
+See `SUBMISSION_NOTES_ZH.md` for submission and Mermaid notes and `CONTRIBUTING.md` for build instructions.
+Authors: Cheng-Kang CHU, Tieyan LI and Liangliang ZHANG (Huawei Technologies Co., Ltd); Ye TAO and Ying WANG (China Unicom).
 
-## Contribute to this work item
+Template styling and build infrastructure are retained. Cover labels have been adapted to clearly identify an unapproved proposal, rather than a Recommendation. Original template licensing is retained in LICENSE.
 
-Contributions to the work of a Working Group are possible once a work item has been adopted by that Working Group and its official repository has been created. The instructions are in the contribution guide: https://fg-tida.github.io/.github/#existing
+Front matter is in `src/doc/frontmatter.rst`; `index.rst` manages separate unnumbered and numbered contents. This avoids the template front-matter hierarchy producing one page per metadata field. PDF headings use a compact continuous layout. The current proposal front matter, template cover, colour styling and build system are preserved.
 
-Anything you contribute is offered as input to the Working Group's work and may be incorporated into its deliverables. Participation follows the ITU-T and FG-TIDA participation, conduct, and IPR rules.
+Chapter 3 follows the inventory and gap-description approach of ITU-T A Suppl. 6. The proposal retains three core requirements. Chapter 4 proposes one Technical Report, developed through three concise stages without a subsection heading.
 
----
+The document order is Introduction, Proposed requirements, Gap analysis, Proposed deliverable and References, followed by Annex A (an illustrative user-authorized two-level flow).
 
-## About this template
+The general model allows deployment-specific root approval and issuance. The user-signed root and terminal interaction in Annex A are illustrative; the three core requirements remain R1-R3.
 
-*When a work item is created from this template, replace this whole section with the metadata of the work item (see the skeleton below), a short description, and the link to its published site.*
-
-This is the shared TIDA specification template: one source that builds a modern web page and a print-ready PDF, with support for diagrams and auto-generated API references. The pages below are produced by this repository, so they double as the template's documentation.
-
-**See the template live:** [Web page](https://fg-tida.github.io/spec-template/) · [PDF](https://fg-tida.github.io/spec-template/specification.pdf)
-
-The document sources are in `src/doc/` (front matter in `index.rst`, chapters in `chapters/`). To modify the template or to learn how to build and preview it, see [CONTRIBUTING.md](CONTRIBUTING.md).
-
-Built with [CUTEspecs](https://github.com/cutespecs/cutespecs).
-
-### Metadata skeleton for your work item
-
-| Field | Value |
-| --- | --- |
-| Title | |
-| Acronym | |
-| Authors | |
-| Working Group | |
-| DataTracker record | |
-| Status | |
-| Published site | |
+Version 1.0 incorporates the revised author list and affiliations. See COMPARISON_V0_6_TO_V1_0_ZH.md for the comparison with the supplied text. Technical chapters and the illustrative diagram remain unchanged.

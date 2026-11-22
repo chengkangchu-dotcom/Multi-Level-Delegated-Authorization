@@ -1,0 +1,25 @@
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant T as Terminal signer
+    participant A as Main Agent A
+    participant B as Service Agent B
+    participant S as Service verifier
+    U->>A: Task request
+    A-->>U: Plan and requested scopes
+    U->>T: Approve and authenticate
+    T->>T: Sign G0 locally
+    T->>A: G0 bound to A, delegation
+    A->>B: Verify identity and key
+    B-->>A: Key-bound identity proof
+    A->>A: Attenuate and sign G1
+    A->>B: G1 bound to B, parent evidence
+    B->>S: Request, G1, evidence and PoP
+    S->>S: Verify chain and policy
+    alt All checks pass
+        S-->>B: Result and receipt
+        B-->>A: Result and receipt
+        A-->>U: Task completion
+    else A check fails
+        S-->>B: Reject request
+    end
